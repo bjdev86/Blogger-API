@@ -1,1 +1,7 @@
-export class Post {}
+export class Post 
+{
+    author: String;  
+    date: Date; 
+    body: String; 
+    replies = [];
+}
