@@ -1,0 +1,31 @@
+GET http://localhost:3000/blog/posts HTTP/1.1
+
+###
+GET http://localhost:3000/blog/posts/6289cdd5c4715f5dc6a57b99 HTTP/1.1
+
+###
+DELETE http://localhost:3000/blog/posts/6289cdd5c4715f5dc6a57b99 HTTP/1.1
+
+###
+POST http://localhost:3000/blog/posts HTTP/1.1
+
+{
+    "author": "Ben Miller", 
+    "date": 1654036720779,
+    "body": "My first post!", 
+    "replies": []
+}
+
+###
+PATCH http://localhost:3000/blog/posts HTTP/1.1
+
+{
+
+}
+
+### Replies ###
+PATCH http://localhost:3000/blog/posts/replies HTTP/1.1
+
+{
+    
+}
