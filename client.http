@@ -4,23 +4,26 @@ GET http://localhost:3000/blog/posts HTTP/1.1
 GET http://localhost:3000/blog/posts/6289cdd5c4715f5dc6a57b99 HTTP/1.1
 
 ###
-DELETE http://localhost:3000/blog/posts/6289cdd5c4715f5dc6a57b99 HTTP/1.1
+DELETE http://localhost:3000/blog/posts/6296e09af6a014dcc074b22b HTTP/1.1
 
 ###
 POST http://localhost:3000/blog/posts HTTP/1.1
+content-type: application/json 
+Date: {{${{$datetime iso8601}}}}
 
 {
     "author": "Ben Miller", 
-    "date": 1654036720779,
+    "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss' }}",
     "body": "My first post!", 
     "replies": []
 }
 
 ###
-PATCH http://localhost:3000/blog/posts HTTP/1.1
+PATCH http://localhost:3000/blog/posts/6289ce40c4715f5dc6a57b9b HTTP/1.1
+content-type: application/json
 
 {
-
+    "author": "Daniel Flint"
 }
 
 ### Replies ###
