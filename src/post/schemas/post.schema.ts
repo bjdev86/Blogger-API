@@ -5,14 +5,6 @@ import { Document } from 'mongoose';
 // Export the the 'PostDocument' type for use by service classes
 export type PostDocument = Post & Document; 
 
-// export class Post
-// {
-//     author: String;
-//     date: Date; 
-//     body: String; 
-//     replies: [];
-// }
-
 // The schema for the posts 
 export const PostSchema = new mongoose.Schema( 
 {
@@ -20,5 +12,5 @@ export const PostSchema = new mongoose.Schema(
     date: Date, 
     body: String, 
     // Array of replies to the prior post 
-    replies: [typeof Post]
+    replies: [{ author:String, date:Date, body:String, replies:[] }]
 });
