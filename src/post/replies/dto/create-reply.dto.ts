@@ -1,9 +1,12 @@
+import mongoose from 'mongoose';
 
 export class CreateReplyDto
 {
+    _id: mongoose.Types.ObjectId;
     author: string; 
     date: Date; 
     body: string; 
-    replies: [];
+    replies: [typeof CreateReplyDto];
+    comments: mongoose.Types.DocumentArray<typeof CreateReplyDto>;
     path: string;
 }

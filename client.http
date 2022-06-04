@@ -27,11 +27,23 @@ content-type: application/json
 }
 
 ### Replies ###
-PATCH http://localhost:3000/blog/replies/ HTTP/1.1
+PATCH http://localhost:3000/blog/post/replies HTTP/1.1
 Content-Type: application/json
 
 {
-    "author": "Donald Duck",
-    "body": "Good thougt Bill, I wander how that will play out in the future?",
-    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161"
+    "author": "Donald Trump",
+    "body": "I mean he's bad, let's admit it.",
+    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161\\629b877e9bd01a3ce8595f0d\\629b9149f8cbf3fe8c147cde\\629b9f0a5e9d1f8928645b9b\\629ba0855e9d1f8928645b9e"
 }
+
+###
+POST http://localhost:3000/blog/post/replies HTTP/1.1
+content-type: application/json
+
+{
+    "author": "Donald Trump", 
+    "body": "He's a looser! The biggest looser you've ever seen!",
+    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161\\629b877e9bd01a3ce8595f0d\\629b9149f8cbf3fe8c147cde\\629b9f0a5e9d1f8928645b9b"
+}
+
+###

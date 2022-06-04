@@ -6,11 +6,19 @@ import { Document } from 'mongoose';
 export type PostDocument = Post & Document; 
 
 // The schema for the posts 
-export const PostSchema = new mongoose.Schema( 
+const PostSchema = new mongoose.Schema( 
 {
+    _id: {type: mongoose.Types.ObjectId, required: true },
     author: String,
     date: Date, 
     body: String, 
-    // Array of replies to the prior post 
-    replies: [{ author:String, date:Date, body:String, replies:[] }]
-});
+    path: {type: String, required: true},
+}, 
+{id: true});
+
+// Add replies to the schema
+PostSchema.add({ replies: [PostSchema] });
+// PostSchema.add({ comments: new mongoose.Types.ArraySubdocument
+//                                               < typeof PostSchema < mongoose.Model<PostSchema>>() });
+
+export default PostSchema;

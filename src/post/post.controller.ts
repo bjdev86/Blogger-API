@@ -1,19 +1,15 @@
-import { Controller, Get, Post, Body, 
-         Patch, Param, Delete }         from '@nestjs/common';
-import { PostService }                  from './post.service';
-import { RepliesService}                from './replies.service';
-import { CreatePostDto }                from './dto/create-post.dto';
-import { UpdatePostDto }                from './dto/update-post.dto';
-import { UpdateReplyDto } from './replies/dto/update-reply.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostService } from './post.service';
+import { RepliesService } from './replies/replies.service';
 
-const POST_PATH = 'posts',
-      RPYL_PATH = 'replies';
+const POST_PATH = 'posts';
 
 @Controller('blog')
 export class PostController
 {
-  constructor(private readonly postService: PostService,
-              private readonly replyService: RepliesService) { }
+  constructor( private readonly postService: PostService ) {}
 
   @Post(POST_PATH)
   create(@Body() createPostDto: CreatePostDto)
@@ -43,12 +39,5 @@ export class PostController
   remove(@Param('id') id: string)
   {
     return this.postService.remove(id);
-  }
-
-  /******************************* REPLY POSTS ********************************/
-  @Patch(`${RPYL_PATH}`)
-  updateReply( @Body() updatePostDto: UpdateReplyDto)
-  {
-    return this.replyService.update(updatePostDto);
   }
 }

@@ -2,6 +2,7 @@
 
 export class UpdateReplyDto
 {
+    
     author: string; 
     date: Date; 
     body: string; 
