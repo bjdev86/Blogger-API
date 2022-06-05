@@ -52,30 +52,55 @@ export class RepliesService
 
    // Commit the reply to the database return the commit result 
    return blogPost.updateOne({ $push: newReply }, 
-                             { arrayFilters: arrayRefs });
+                             { arrayFilters: arrayRefs }).exec();
   }
-  
+
+  /**
+   * 
+   * @param path 
+   * 
+   * TODO consider sorting and using binary search for this specific algorithm. 
+   * TODO If it works out that Mongoose wont work for this service. 
+   */
+  async find( path: string )
+  {
+    // Local Variable Declaratin 
+    let pathTokens: string[] = undefined, reply: PostDocument = undefined;
+
+    // Tokenize the path over path delimiter 
+    pathTokens = path.split(RPLY_PATH_DELIM);
+   
+    // Get the root blog post 
+    reply = (await this.postModel.findById(pathTokens.shift())); 
+
+    // Descend down the reply chain looking for the desired reply
+    for ( const rID of pathTokens )
+    {
+      reply = (reply.replies as Array<PostDocument>)
+              .find( reply => reply.id === rID ); 
+    }
+
+    // Return the reply
+     return reply;
+  }
 
   async update( updateReplyDTO: UpdateReplyDto )
   {
     // Local Variable Delcaration 
     let blogPost: PostDocument = undefined;
-    let replyPosts: string[] = undefined; 
+    let pathTokens: string[] = undefined; 
     let replyPath = '', i: any = 0; 
     const setters = {}, postFilters = [];
 
     // Tokenize the path over path delimiter 
-    replyPosts = updateReplyDTO.path.split(RPLY_PATH_DELIM);
-
-    // The path is no longer needed
-   //delete updateReplyDTO.path;
+    pathTokens = updateReplyDTO.path.split(RPLY_PATH_DELIM);
     
     // Fetch the reply to update from the database
-    blogPost = await this.postModel.findById(replyPosts.shift());
+    blogPost = await this.postModel.findById(pathTokens.shift());
     
     /* Trasverse down the reply tree recording the path and setting the array 
      * filters */
-    for (const replyPost of replyPosts)
+    for (const replyPost of pathTokens)
     {
         replyPath += `replies.$[reply${i}].`;
         postFilters.push({ [`reply${i++}._id`]: replyPost });
@@ -88,8 +113,7 @@ export class RepliesService
     }
 
     // Commit the update, return result 
-    return await blogPost.updateOne(
-                 { $set: setters }, 
-                 { arrayFilters: postFilters });
+    return await blogPost.updateOne({ $set: setters }, 
+                                    { arrayFilters: postFilters });
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesService } from './replies.service';
@@ -15,6 +15,17 @@ export class RepliesController
   create( @Body() createReplyDto: CreateReplyDto ): Promise<any> 
   {
     return this.replyService.create( createReplyDto );
+  }
+
+  /**
+   * 
+   * @param path 
+   * @returns 
+   */
+  @Get()
+  retrieveOne(@Body('path') path )
+  {
+    return this.replyService.find(path);
   }
 
   /**
