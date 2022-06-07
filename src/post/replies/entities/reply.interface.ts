@@ -1,5 +1,7 @@
 import { Types } from 'mongoose';
 
+export const REPLY_NAME = 'Reply'; 
+
 export interface Reply 
 {
     author: string;  
