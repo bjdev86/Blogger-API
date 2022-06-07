@@ -1,7 +1,7 @@
 GET http://localhost:3000/blog/posts HTTP/1.1
 
 ###
-GET http://localhost:3000/blog/posts/6289cdd5c4715f5dc6a57b99 HTTP/1.1
+GET http://localhost:3000/blog/posts/629da8dd90329072b7ed96c0 HTTP/1.1
 
 ###
 DELETE http://localhost:3000/blog/posts/6296e09af6a014dcc074b22b HTTP/1.1
@@ -14,16 +14,17 @@ Date: {{$datetime iso8601}}
 {
     "author": "Ben Miller", 
     "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss' }}",
-    "body": "My first post!", 
+    "body": "My first post! Again!", 
     "replies": []
 }
 
 ###
-PATCH http://localhost:3000/blog/posts/6289ce40c4715f5dc6a57b9b HTTP/1.1
+PATCH http://localhost:3000/blog/posts/629da8dd90329072b7ed96c0 HTTP/1.1
 content-type: application/json
 
 {
-    "author": "Daniel Flint"
+    "author": "Bill Marh", 
+    "body": "By 2050 we'll all be trans."
 }
 
 ### Replies ###
@@ -31,19 +32,20 @@ PATCH http://localhost:3000/blog/post/replies HTTP/1.1
 Content-Type: application/json
 
 {
-    "author": "Donald Trump",
-    "body": "I mean he's bad, let's admit it.",
-    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161\\629b877e9bd01a3ce8595f0d\\629b9149f8cbf3fe8c147cde\\629b9f0a5e9d1f8928645b9b\\629ba0855e9d1f8928645b9e"
+    
+    "path": "629da8dd90329072b7ed96c0\\629db1310d0cb7470d2538f2\\629db973814ae21e7f0dc163"
 }
 
 ###
 POST http://localhost:3000/blog/post/replies HTTP/1.1
 content-type: application/json
+Date: {{$datetime iso8601}}
 
 {
-    "author": "Donald Trump", 
-    "body": "He's a looser! The biggest looser you've ever seen!",
-    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161\\629b877e9bd01a3ce8595f0d\\629b9149f8cbf3fe8c147cde\\629b9f0a5e9d1f8928645b9b"
+    "author": "Kamala Harris", 
+    "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss' }}",
+    "body": "We need to keep doing what we have been doing every day and that is what we have always been doing...",
+    "path": "629da8dd90329072b7ed96c0\\629db1310d0cb7470d2538f2"
 }
 
 ### Get a reply ###
@@ -51,5 +53,13 @@ GET http://localhost:3000/blog/post/replies HTTP/1.1
 Content-Type: application/json
 
 {
-    "path": "628db76f29113eda27843a39\\62956ceaff1366796b5e1161\\629b877e9bd01a3ce8595f0d\\629b9149f8cbf3fe8c147cde\\629b9f0a5e9d1f8928645b9b\\629ba0855e9d1f8928645b9e"
+    "path": "629da8dd90329072b7ed96c0\\629db1310d0cb7470d2538f2"
+}
+
+### Delete a reply ###
+DELETE  http://localhost:3000/blog/post/replies HTTP/1.1
+Content-Type: application/json
+
+{
+    "path": "629da8dd90329072b7ed96c0\\629db1310d0cb7470d2538f2\\629dba356d0f98ecff8005af"
 }
