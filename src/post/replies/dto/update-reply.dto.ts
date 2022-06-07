@@ -6,6 +6,6 @@ export class UpdateReplyDto
     author: string; 
     date: Date; 
     body: string; 
-    replies: [];
+    replies?: [];
     path: string;
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesService } from './replies.service';
@@ -25,7 +25,7 @@ export class RepliesController
   @Get()
   retrieveOne(@Body('path') path )
   {
-    return this.replyService.find(path);
+    return this.replyService.findOne(path);
   }
 
   /**
@@ -41,4 +41,15 @@ export class RepliesController
   {
     return this.replyService.update(updatePostDto);
   }
+
+    /**
+   * 
+   * @param path 
+   * @returns 
+   */
+     @Delete()
+     deleteOne(@Body('path') path )
+     {
+       return this.replyService.deleteOne(path);
+     }
 }
