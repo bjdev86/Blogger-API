@@ -1,24 +1,28 @@
-import * as mongoose from 'mongoose'
+import { Model, Schema, Types } from 'mongoose';
 import { Post } from '../entities/post.entity';
-import { Document } from 'mongoose';
+import { Reply } from '../replies/entities/reply.interface';
+import { ReplySchema } from '../replies/schemas/reply.schema';
 
-// Export the the 'PostDocument' type for use by service classes
-export type PostDocument = Post & Document; 
+/* TMthodsAndOverrides generic type enforcing that replies will be a Mongoose 
+ * Doc Array */
+type PostDocumentProps = 
+{ 
+    replies: Types.DocumentArray<Reply>; 
+};
+
+// Create Model type for PostDocument models
+export type PostModelType = Model<Post, {}, PostDocumentProps>; 
+
+export type PostDocument = Post & PostModelType; 
 
 // The schema for the posts 
-const PostSchema = new mongoose.Schema( 
+export const PostSchema = new Schema<Post, PostModelType>( 
 {
-    _id: {type: mongoose.Types.ObjectId, required: true },
     author: String,
     date: Date, 
     body: String, 
-    path: {type: String, required: true},
-}, 
-{id: true});
+    replies: [ReplySchema]
+});
 
-// Add replies to the schema
-PostSchema.add({ replies: [PostSchema] });
-// PostSchema.add({ comments: new mongoose.Types.ArraySubdocument
-//                                               < typeof PostSchema < mongoose.Model<PostSchema>>() });
-
-export default PostSchema;
+// Export the schema and the model type for model and document instansiation 
+// export {PostSchema, PostModelType};

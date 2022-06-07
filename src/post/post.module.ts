@@ -1,19 +1,18 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose'
-import { PostService } from './post.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { NAME as PostName } from './entities/post.entity';
 import { PostController } from './post.controller';
+import { PostService } from './post.service';
 import { RepliesController } from './replies/replies.controller';
 import { RepliesService } from './replies/replies.service';
-import { Post } from './entities/post.entity';
-import PostSchema from './schemas/post.schema';
-
+import { PostSchema } from './schemas/post.schema';
 @Module(
 {
   imports: 
   [
     // Mongoose/MongoDB onboard!
     MongooseModule.forFeature( 
-    [{ name: Post.name, schema: PostSchema }])
+    [{ name: PostName, schema: PostSchema }])
   ],
   controllers: [PostController, RepliesController],
   providers: [PostService, RepliesService]

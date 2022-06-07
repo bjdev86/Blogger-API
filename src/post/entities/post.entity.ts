@@ -1,8 +1,12 @@
+import { Reply } from "../replies/entities/reply.interface";
+import { Types } from 'mongoose';
 
-export class Post 
+export interface Post
 {
     author: String;  
     date: Date; 
     body: String; 
-    replies = [];
+    replies: Types.DocumentArray<Reply>;
 }
+
+export const NAME = 'Post';

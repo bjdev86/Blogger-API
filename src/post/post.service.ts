@@ -1,23 +1,25 @@
-import mongoose from 'mongoose';
-import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import mongoose, { Model, model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostDocument } from './schemas/post.schema';
-import { Post } from './entities/post.entity';
+import { NAME as PostName, Post } from './entities/post.entity';
+import { PostDocument, PostModelType, PostSchema } from './schemas/post.schema';
 
 @Injectable()
 export class PostService
 {
   // Constructor to setup the the mongoose module injection 
-  constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
+  constructor( @InjectModel( PostName ) private postModel: 
+                             Model<Post, PostModelType>) 
+  {}
 
-  create(createPostDto: CreatePostDto)
+  create( createPostDto: CreatePostDto )
   {
     // Create a new document to add in 
-    const newPost = new this.postModel(createPostDto);
-
+     const newPost = new this.postModel(createPostDto);
+    //const newPost = new this.model(createPostDto);
+    
     // Save the new post to persistence
     return newPost.save();
   }
@@ -27,7 +29,7 @@ export class PostService
     return this.postModel.find({});
   }
 
-  findOne(id: string)
+  findOne( id: string )
   {
     return this.postModel.findById(id);
   }
@@ -41,11 +43,11 @@ export class PostService
   async update(id: string, updatePostDto: UpdatePostDto)
   {
     // Local Variable Declaration 
-    let post: PostDocument = undefined;
+    let post: any = undefined;
 
     // Find the document to be edited 
     post = await this.postModel.findById(id).exec();
-
+    
     // Update the post with the incoming data from the dto
     for (const [key, val] of Object.entries(updatePostDto)) post[key] = val;
 
