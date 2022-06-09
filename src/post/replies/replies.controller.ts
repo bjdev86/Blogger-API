@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
 import { RepliesService } from './replies.service';
@@ -20,10 +20,11 @@ export class RepliesController
   /**
    * 
    * @param path 
+   * 
    * @returns 
    */
   @Get()
-  retrieveOne(@Body('path') path )
+  retrieveOne( @Body('path') path ): Promise<any>
   {
     return this.replyService.findOne(path);
   }
@@ -31,9 +32,10 @@ export class RepliesController
   /**
    * 
    * @param updatePostDto 
+   * 
    * @returns
    * 
-   * TODO: Should the body contain the path or should this passed as a 
+   * TODO: Should the body contain the path or should it be passed as a parameter 
    * parameter?  
    */
   @Patch()

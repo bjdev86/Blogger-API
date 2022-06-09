@@ -16,7 +16,7 @@ export class RepliesService
   /**
    * 
    * @param postModel 
-   * todo: What if you used the Repy and ReplyModelType for the Model
+   *
    */
   // Construction to recieve the Mongoose Model token 
   constructor(@InjectModel(PostName) private postModel: 
@@ -27,7 +27,6 @@ export class RepliesService
   * @param createReplyDTO 
   * @returns 
   * 
-  * TODO: Use hooks/middleware to append new id to path
   */
   async create ( createReplyDTO: CreateReplyDto )
   {
@@ -55,7 +54,7 @@ export class RepliesService
     createReplyDTO.path += RPLY_PATH_DELIM + createReplyDTO._id.toHexString();
 
     // Push the reply data passed on the previous post
-    replyPost.replies.push(createReplyDTO); 
+    console.log(replyPost.replies.push(createReplyDTO)); 
     
     // Save the addition and return 
     return blogPost.save();

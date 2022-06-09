@@ -6,11 +6,23 @@ import { RepliesService } from './replies/replies.service';
 
 const POST_PATH = 'posts';
 
+/**
+ * 
+ */
 @Controller('blog')
 export class PostController
 {
   constructor( private readonly postService: PostService ) {}
 
+  /**
+   * Function to handle POST update requests for blog posts. 
+   *  
+   * @param createPostDto Data Transfer Object to convey the data passed 
+   * through this route to the service handler serving this route handler. 
+   * 
+   * @returns JSON object indicating a success or failure of the service 
+   * operation. 
+   */
   @Post(POST_PATH)
   create(@Body() createPostDto: CreatePostDto)
   {

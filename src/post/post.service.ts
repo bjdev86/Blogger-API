@@ -18,7 +18,6 @@ export class PostService
   {
     // Create a new document to add in 
      const newPost = new this.postModel(createPostDto);
-    //const newPost = new this.model(createPostDto);
     
     // Save the new post to persistence
     return newPost.save();
