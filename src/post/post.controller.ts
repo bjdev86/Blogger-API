@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import exp from 'constants';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
-import { RepliesService } from './replies/replies.service';
+import { BadRequestException } from './exceptions/badrequest.exception';
 
+// Module Constants 
 const POST_PATH = 'posts';
 
 /**
@@ -24,32 +26,42 @@ export class PostController
    * operation. 
    */
   @Post(POST_PATH)
-  create(@Body() createPostDto: CreatePostDto)
+  async create( @Body() createPostDto: CreatePostDto )
   {
-    return this.postService.create(createPostDto);
+    return await this.postService.create(createPostDto);
   }
 
   @Get(POST_PATH)
-  findAll()
+  async findAll()
   {
-    return this.postService.findAll();
+    return await this.postService.findAll();
   }
 
   @Get(`${POST_PATH}/:id`)
-  findOne(@Param('id') id: string)
+  async findOne(@Param('id') id: string)
   {
-    return this.postService.findOne(id);
+    return await this.postService.findOne(id);
   }
 
   @Patch(`${POST_PATH}/:id`)
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto)
+  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto)
   {
-    return this.postService.update(id, updatePostDto);
+    return await this.postService.update(id, updatePostDto);
   }
 
   @Delete(`${POST_PATH}/:id`)
-  remove(@Param('id') id: string)
+  remove( @Param('id') id: string )
   {
-    return this.postService.remove(id);
+    try
+    {
+      return this.postService.remove(id);
+    }
+    catch( exp ) 
+    {
+      if ( exp.name === BadRequestException.name ) 
+      {
+         throw new BadRequestException();
+      }
+    }
   }
 }
