@@ -40,4 +40,4 @@ async function bootstrap()
   // Start the app running on the give port
   await app.listen(3000);
 }
-bootstrap(); // Start the bootstrap process. Start the app
+bootstrap(); // Start the bootstrap process. Start the app.
