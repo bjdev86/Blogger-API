@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { CreateReplyDto } from "../replies/dto/create-reply.dto";
 
 /**
