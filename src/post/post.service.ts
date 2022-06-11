@@ -53,11 +53,20 @@ export class PostService
     // Find the document to be edited 
     post = await this.postModel.findById( id ).exec();
     
+    // Return the null post if null was returned for query operation.  
+    if (post === null)
+    {
+      return post; 
+    }
+
     // Update the post with the incoming data from the dto
-    for (const [key, val] of Object.entries(updatePostDto)) post[key] = val;
+    for ( const [key, val] of Object.entries(updatePostDto) )
+    {
+      post[key] = val;
+    }
 
     // Save the updated doucment, and return the updated version 
-    return post.save();
+    return await post.save();
   }
 
   /**
@@ -67,9 +76,10 @@ export class PostService
    * 
    * @returns Object indicating how many records were deleted.
    */
-  remove( id: string )
+  async remove( id: string )
   {
-    return this.postModel.deleteOne(
+    // Capture the delete count to ensure deletion took place
+    return await this.postModel.deleteOne(
     {
       _id: mongoose.Types.ObjectId.createFromHexString(id)
     });

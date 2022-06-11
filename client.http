@@ -1,10 +1,10 @@
 GET http://localhost:3000/blog/posts HTTP/1.1
 
 ###
-GET http://localhost:3000/blog/posts/629da8dd90329072b7ed96c0 HTTP/1.1
+GET http://localhost:3000/blog/posts/62a4092dec796f77ab93b1d1  HTTP/1.1
 
 ###
-DELETE http://localhost:3000/blog/posts/62a1736b8c9a9670103bbb8c HTTP/1.1
+DELETE http://localhost:3000/blog/posts/62a40283661c69120b83c93e HTTP/1.1
 
 ###
 POST http://localhost:3000/blog/posts HTTP/1.1
@@ -19,7 +19,7 @@ Date: {{$datetime iso8601}}
 }
 
 ###
-PATCH http://localhost:3000/blog/posts/629da8dd90329072b7ed96c0 HTTP/1.1
+PATCH http://localhost:3000/blog/posts/62a4092dec796f77ab93b1d1 HTTP/1.1
 content-type: application/json
 
 {

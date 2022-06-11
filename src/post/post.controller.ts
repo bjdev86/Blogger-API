@@ -1,10 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
-import exp from 'constants';
+import { Body, Controller, Delete, Get}from '@nestjs/common' 
+import { Param, Patch, Post } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostService } from './post.service';
 import { BadRequestException } from './exceptions/badrequest.exception';
-import { ApiOperation } from '@nestjs/swagger';
+import { PostService } from './post.service';
 
 // Module Constants 
 const POST_PATH = 'posts';
@@ -32,30 +31,60 @@ export class PostController
   @Post(POST_PATH)
   async create( @Body() createPostDto: CreatePostDto )
   {
-    return await this.postService.create(createPostDto);
+    await this.postService.create(createPostDto);
   }
 
   /**
    * Handler to return all of the documents in database.
    * 
    * @returns JSON Object containing all the documents in the database
+   * 
+   * todo Add limit and offset
    */
   @Get(POST_PATH)
   async findAll()
   {
+    // Fetch all of the blog posts from the database 
     return await this.postService.findAll();
   }
 
   @Get(`${POST_PATH}/:id`)
   async findOne(@Param('id') id: string)
   {
-    return await this.postService.findOne(id);
+    // Query the database for the specific blog post
+    const dbRes = await this.postService.findOne(id);
+
+    /* If the result was null, because it didn't exist in the database throw an 
+     * error */
+    if (dbRes === null)
+    {
+      throw new BadRequestException();
+    }
+
+    return dbRes;
   }
 
+  /**
+   * Function to update the contents and properties of a specific blog post. 
+   * 
+   * @param id The ObjectId for the blogpost being updated
+   * 
+   * @param updatePostDto The object containing the data intended to be 
+   *                      conveyed to the function for the update. 
+   * 
+   * @returns Boolean indicating success or failure of the update operation
+   */
   @Patch(`${POST_PATH}/:id`)
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto)
   {
-    return await this.postService.update(id, updatePostDto);
+    // Make the update capture the database result
+    const dbRes = await this.postService.update(id, updatePostDto);
+
+    // If the dbResult is null throw a BadRequest Exception 
+    if (dbRes === null)
+     {
+        throw new BadRequestException();
+     }
   }
 
   /**
@@ -64,21 +93,20 @@ export class PostController
    * @param id The ObjectId of the document to delete from the database
    * 
    * @example {}
-   * @returns 
+   * 
+   * @returns Boolean indicating whether the deletetiong succeeded or failed
    */
   @Delete(`${POST_PATH}/:id`)
-  remove( @Param('id') id: string )
+  async remove( @Param('id') id: string )
   {
-    try
+    // Preform the record deletion capture the result 
+      const dbRes = await this.postService.remove(id);
+
+    /* If the result's delete count is not one then throw a bad request 
+     * exception */ 
+    if (dbRes.deletedCount !== 1) 
     {
-      return this.postService.remove(id);
-    }
-    catch( exp ) 
-    {
-      if ( exp.name === BadRequestException.name ) 
-      {
-         throw new BadRequestException();
-      }
+      throw new BadRequestException();
     }
   }
 }
