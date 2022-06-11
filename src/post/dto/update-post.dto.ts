@@ -1,10 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePostDto } from './create-post.dto';
 
-export class UpdatePostDto extends PartialType(CreatePostDto) 
+export class UpdatePostDto
 {
     author: string; 
     date: Date; 
     body: string; 
-    replies: [];
+    replies?: UpdatePostDto[] = [];
 }

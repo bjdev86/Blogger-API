@@ -5,8 +5,7 @@ export class CreateReplyDto
     _id: mongoose.Types.ObjectId;
     author: string; 
     date: Date; 
-    body: string; 
-    replies: [typeof CreateReplyDto];
-    comments: mongoose.Types.DocumentArray<typeof CreateReplyDto>;
+    body: string;
     path: string;
+    replies?: CreateReplyDto[] = [];
 }
