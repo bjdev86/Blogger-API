@@ -1,7 +1,7 @@
 GET http://localhost:3000/blog/posts HTTP/1.1
 
 ###
-GET http://localhost:3000/blog/posts/62a4092dec796f77ab93b1d1  HTTP/1.1
+GET http://localhost:3000/blog/posts/fred  HTTP/1.1
 
 ###
 DELETE http://localhost:3000/blog/posts/62a40283661c69120b83c93e HTTP/1.1
@@ -12,18 +12,18 @@ content-type: application/json
 Date: {{$datetime iso8601}}
 
 {
-    "author": "Bill Jackson ", 
+    "author": "James Guy", 
     "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss' }}",
     "body": "My first post! What do ya think?!", 
     "replies": []
 }
 
 ###
-PATCH http://localhost:3000/blog/posts/62a4092dec796f77ab93b1d1 HTTP/1.1
+PATCH http://localhost:3000/blog/posts/62a5750d659f743e8aab39e1 HTTP/1.1
 content-type: application/json
 
 {
-    "author": "Joe Biden", 
+    "author": "James Holden", 
     "body": "Meta-calf care"
 }
 
@@ -42,10 +42,10 @@ content-type: application/json
 Date: {{$datetime iso8601}}
 
 {
-    "author": "Josh Herdon", 
+    "author": "Ruben Mora", 
     "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss' }}",
     "body": "We're gonna miss ya Carlos! Have fun in Florida buddy!",
-    "path": "629da8dd90329072b7ed96c0\\629db1310d0cb7470d2538f2\\629edac62401d99db75c83ec\\629edb5e2401d99db75c83f0"
+    "path": "62a5750d659f743e8aab39e1"
 }
 
 ### Get a reply ###

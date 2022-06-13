@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Document, Model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { NAME as PostName, Post } from './entities/post.entity';
+import { NAME as PostName, PostModel } from './entities/post.entity';
 import { BadRequestException } from './exceptions/badrequest.exception';
 import { PostModelType } from './schemas/post.schema';
 
@@ -18,7 +18,7 @@ export class PostService
 {
   // Constructor to setup the the mongoose module injection 
   constructor( @InjectModel( PostName ) private postModel: 
-                             Model<Post, PostModelType>){}
+                             Model<PostModel, PostModelType>){}
 
   async create( createPostDto: CreatePostDto ): Promise <Document>
   {

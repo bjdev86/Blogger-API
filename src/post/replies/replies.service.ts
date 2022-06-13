@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { NAME as PostName, Post } from '../entities/post.entity';
+import { NAME as PostName, PostModel } from '../entities/post.entity';
 import { PostModelType } from '../schemas/post.schema';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { UpdateReplyDto } from './dto/update-reply.dto';
@@ -20,7 +20,7 @@ export class RepliesService
    */
   // Construction to recieve the Mongoose Model token 
   constructor(@InjectModel(PostName) private postModel: 
-                                     Model<Post, PostModelType>) {}
+                                     Model<PostModel, PostModelType>) {}
 
   /**
   * 

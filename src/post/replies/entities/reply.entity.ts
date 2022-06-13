@@ -2,11 +2,11 @@ import { Types } from 'mongoose';
 
 export const REPLY_NAME = 'Reply'; 
 
-export interface Reply 
+export interface ReplyModel 
 {
     author: string;  
     date: Date; 
     body: string; 
     path: string;
-    replies: Types.DocumentArray<Reply>;
+    replies?: Types.DocumentArray<ReplyModel>;
 }

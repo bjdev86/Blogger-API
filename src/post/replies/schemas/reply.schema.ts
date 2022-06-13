@@ -1,20 +1,20 @@
 import { Model, Schema, Types } from 'mongoose';
-import { Reply } from '../entities/reply.interface';
+import { ReplyModel } from '../entities/reply.entity';
 
 /* Type to use for the TMthodsAndOverrides parameter in the model type 
  * definition */
 type ReplyDocumentOverrides = 
 {
-    replies: Types.DocumentArray<Reply>;
+    replies: Types.DocumentArray<ReplyModel>;
 }; 
 
 // The type used to define the model for a reply document
-type ReplyModelType = Model<Reply, {}, ReplyDocumentOverrides>;
+type ReplyModelType = Model<ReplyModel, {}, ReplyDocumentOverrides>;
 
-type ReplySubDocument = Reply & ReplyModelType; 
+type ReplySubDocument = ReplyModel & ReplyModelType; 
 
 // Define the reply schema 
-const ReplySchema = new Schema<Reply, ReplyModelType>(
+const ReplySchema = new Schema<ReplyModel, ReplyModelType>(
 {
     author: String, 
     date: Date, 
