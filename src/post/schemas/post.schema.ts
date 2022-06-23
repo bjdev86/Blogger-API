@@ -15,14 +15,24 @@ export type PostModelType = Model<PostModel, {}, PostDocumentProps>;
 
 export type PostDocument = PostModel & PostModelType; 
 
-// The schema for the posts 
+/** 
+ * The schema for the posts
+ * 
+ * @todo Add custom, default error message
+ */ 
 export const PostSchema = new Schema<PostModel, PostModelType>( 
 {
-    author: String,
-    date: Date, 
-    body: String, 
-    replies: [ReplySchema]
+    author: 
+    { 
+        type: String, required: true, validate: 
+        { 
+            validator:  (value: string) => !( /^\d*$/.test( value )),
+            message: 'Author names must be alphanumeric and cannot be soely' +  
+                     ' numeric.',
+        }
+    },
+    date: { type: Date, required: true }, 
+    body: { type: String, required: true },
+    replies: { type: [ReplySchema], required: false }
 });
 
-// Export the schema and the model type for model and document instansiation 
-// export {PostSchema, PostModelType};
