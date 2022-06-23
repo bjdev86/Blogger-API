@@ -1,5 +1,6 @@
-import { ArgumentsHost, Catch, ExceptionFilter, Logger } from "@nestjs/common";
-import { HttpException } from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, 
+         HttpException, Logger } from "@nestjs/common";
+import { BadRequestException } from "src/post/exceptions/badrequest.exception";
 
 /**
  * Class to define an exception filter for blog posts and blog posts replies. 
@@ -8,7 +9,7 @@ import { HttpException } from "@nestjs/common";
  * to know. Additionally, logging will be preformed on the exception, so tha 
  * errors can be resolved quickly and completely.  
  */
-@Catch( HttpException )
+@Catch( BadRequestException )
 export class BlogExceptionFilter implements ExceptionFilter< HttpException >
 {
     /* Create a logger instance to log output for debugging and trouble 
@@ -16,7 +17,7 @@ export class BlogExceptionFilter implements ExceptionFilter< HttpException >
     private readonly logger = new Logger();
 
     // The filter will look for and catch HttpExceptions
-    catch(exception: HttpException, host: ArgumentsHost)
+    catch( exception: BadRequestException, host: ArgumentsHost )
     {
         // Get an http context 
         const httpCtx = host.switchToHttp();
@@ -34,7 +35,8 @@ export class BlogExceptionFilter implements ExceptionFilter< HttpException >
         {
             statusCode: status,
             timestamp: new Date().toISOString(),
-            path: request.url
+            message: exception.message,
+            reasons: exception.reasons
         });
 
         // Log the exception as an error 
