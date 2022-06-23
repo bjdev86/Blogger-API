@@ -71,9 +71,7 @@ export class PostService
     let post: any = undefined;
 
     // Find the document to be edited 
-    post = await this.postModel.findById( id ).exec();
-    
-   
+    post = await this.findOne(id);   
 
     // Update the post with the incoming data from the dto
     for ( const [key, val] of Object.entries(updatePostDto) )
