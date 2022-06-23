@@ -13,4 +13,3 @@ export class CreateReplyDto implements ReplyModel
     @ApiProperty({ type: () => CreateReplyDto })
     replies?: Types.DocumentArray<ReplyModel>;
 }
-
