@@ -1,4 +1,4 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Document, Model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -13,20 +13,19 @@ import { PostModelType } from './schemas/post.schema';
  * CRUD functions for blog posts. 
  */
 @Injectable()
-@UseFilters( BadRequestException )
 export class PostService
 {
   // Constructor to setup the the mongoose module injection 
   constructor( @InjectModel( PostName ) private postModel: 
                              Model<PostModel, PostModelType>){}
 
-  async create( createPostDto: CreatePostDto ): Promise <Document>
+  async create( createPostDto: CreatePostDto ): Promise<void>
   {
     // Create a new document to add in 
      const newPost = new this.postModel(createPostDto);
     
     // Save the new post to persistence
-    return newPost.save();
+    await newPost.save({validateBeforeSave: false});
   }
 
   async findAll(): Promise<any>
@@ -34,9 +33,30 @@ export class PostService
     return this.postModel.find({}).exec();
   }
 
+  /**
+   * Function to fine a single post document in the database and return it. 
+   * 
+   * @param id The unique hex string id for a specific post in the database.
+   * @returns The post identified by <code>id</code>
+   */
   async findOne( id: string ): Promise<any>
   {
-    return this.postModel.findById(id).exec();
+    // Local Variable Declaration 
+    let post: any = undefined;
+    
+    // Attempt to fetch the post from persistence
+    post = await this.postModel.findById(id).exec();
+
+     // Return the null post if null was returned for query operation.  
+     if (post === null)
+     {
+       throw new BadRequestException(
+        {
+          objectId: `ID ${id} was not found in the db`
+        }); 
+     }
+
+     return post;
   }
 
   /**
@@ -53,11 +73,7 @@ export class PostService
     // Find the document to be edited 
     post = await this.postModel.findById( id ).exec();
     
-    // Return the null post if null was returned for query operation.  
-    if (post === null)
-    {
-      return post; 
-    }
+   
 
     // Update the post with the incoming data from the dto
     for ( const [key, val] of Object.entries(updatePostDto) )
@@ -81,7 +97,7 @@ export class PostService
     // Capture the delete count to ensure deletion took place
     return await this.postModel.deleteOne(
     {
-      _id: mongoose.Types.ObjectId.createFromHexString(id)
+      _id: mongoose.Types.ObjectId.createFromHexString( id )
     });
   }
 }

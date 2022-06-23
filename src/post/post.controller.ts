@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get}from '@nestjs/common' 
-import { Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseFilters } from '@nestjs/common';
+import { BlogExceptionFilter } from 'src/exceptions/blog-exceptions.filter';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BadRequestException } from './exceptions/badrequest.exception';
+import { CreateDtoValidationPipe } from './pipes/createDTO-validation.pipe';
+import { UpdateDtoValidationPipe } from './pipes/updateDTO-validation.pipe';
 import { PostService } from './post.service';
 
 // Module Constants 
@@ -12,6 +14,7 @@ const POST_PATH = 'posts';
  * 
  */
 @Controller('blog')
+@UseFilters( BlogExceptionFilter )
 export class PostController
 {
   constructor( private readonly postService: PostService ) {}
@@ -29,9 +32,10 @@ export class PostController
    */
   // @ApiOperation({summary: "Creates a new blog post and saves it in the database. "})
   @Post(POST_PATH)
-  async create( @Body() createPostDto: CreatePostDto )
+  async create( @Body( CreateDtoValidationPipe ) createPostDto: CreatePostDto )
   {
-    await this.postService.create(createPostDto);
+    // Create a new blog post and add it to the 
+    await this.postService.create( createPostDto );
   }
 
   /**
@@ -54,13 +58,6 @@ export class PostController
     // Query the database for the specific blog post
     const dbRes = await this.postService.findOne(id);
 
-    /* If the result was null, because it didn't exist in the database throw an 
-     * error */
-    if (dbRes === null)
-    {
-      throw new BadRequestException();
-    }
-
     return dbRes;
   }
 
@@ -75,7 +72,8 @@ export class PostController
    * @returns Boolean indicating success or failure of the update operation
    */
   @Patch(`${POST_PATH}/:id`)
-  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto)
+  async update( @Param('id') id: string, 
+                @Body( UpdateDtoValidationPipe ) updatePostDto: UpdatePostDto )
   {
     // Make the update capture the database result
     const dbRes = await this.postService.update(id, updatePostDto);
