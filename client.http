@@ -4,7 +4,7 @@ GET http://localhost:3000/blog/posts HTTP/1.1
 GET http://localhost:3000/blog/posts/6289ce40c4715f5dc6a57b9e  HTTP/1.1
 
 ###
-DELETE http://localhost:3000/blog/posts/62a40283661c69120b83c93f HTTP/1.1
+DELETE http://localhost:3000/blog/posts/628db76f29113eda27843a39 HTTP/1.1
 
 ###
 POST http://localhost:3000/blog/posts HTTP/1.1
