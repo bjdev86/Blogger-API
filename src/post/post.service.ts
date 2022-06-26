@@ -11,6 +11,11 @@ import { PostModelType } from './schemas/post.schema';
 /**
  * Class to define the behavior for the Posts API. This class simply defines 
  * CRUD functions for blog posts. 
+ * 
+ * @todo Is findOneAnd*[Update | Delete | Replace] faster and more efficient 
+ *       than finding the document and the preforming a delete operation on 
+ *       it? Is it one single operation or is it two operations against the 
+ *       database?   
  */
 @Injectable()
 export class PostService
@@ -22,15 +27,15 @@ export class PostService
   async create( createPostDto: CreatePostDto ): Promise<void>
   {
     // Create a new document to add in 
-     const newPost = new this.postModel(createPostDto);
+    const newPost = new this.postModel(createPostDto);
     
     // Save the new post to persistence
-    await newPost.save({validateBeforeSave: false});
+    newPost.save({ validateBeforeSave: false });
   }
 
   async findAll(): Promise<any>
   {
-    return this.postModel.find({}).exec();
+    return this.postModel.find({});
   }
 
   /**
@@ -45,18 +50,21 @@ export class PostService
     let post: any = undefined;
     
     // Attempt to fetch the post from persistence
-    post = await this.postModel.findById(id).exec();
-
-     // Return the null post if null was returned for query operation.  
-     if (post === null)
-     {
-       throw new BadRequestException(
-        {
-          objectId: `ID ${id} was not found in the db`
-        }); 
-     }
-
-     return post;
+    post = await this.postModel.findById(id);
+    
+    // Return the post if it is found  
+    if( post ) 
+    {
+      return post;
+    }
+    else 
+    {
+      // Throw an error indicating the post record was not found
+      throw new BadRequestException(
+      {
+        objectId: `ID ${id} was not found in the db`
+      }); 
+    }
   }
 
   /**
@@ -74,13 +82,13 @@ export class PostService
     post = await this.findOne(id);   
 
     // Update the post with the incoming data from the dto
-    for ( const [key, val] of Object.entries(updatePostDto) )
+    for ( const [key, val] of Object.entries( updatePostDto ))
     {
       post[key] = val;
     }
 
     // Save the updated doucment, and return the updated version 
-    return await post.save();
+    return post.save();
   }
 
   /**
@@ -89,13 +97,23 @@ export class PostService
    * @param id The id of the post to be deleted in the database
    * 
    * @returns Object indicating how many records were deleted.
+   * 
+   * @todo Not sure if this is the right usage of "deleteOne", but it is 
+   *       working. The last search didn't reveal anything. Using it now for 
+   *       consistencey.
    */
-  async remove( id: string )
+  async remove( id: string ): Promise<void>
   {
-    // Capture the delete count to ensure deletion took place
-    return await this.postModel.deleteOne(
-    {
-      _id: mongoose.Types.ObjectId.createFromHexString( id )
-    });
+    // Find and delete the post if it exists 
+    const post = await this.findOne(id);
+    await post.deleteOne(); 
+    //await this.postModel.deleteOne({ _id: post.id });
+    // this.postModel.findByIdAndDelete(id, (error, post) => 
+    // {
+    //   if (!post)
+    //   {
+    //     throw new BadRequestException({ id: "Post not found." })
+    //   }
+    // });
   }
 }
