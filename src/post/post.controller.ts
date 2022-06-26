@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseFilters } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseFilters } from '@nestjs/common';
 import { BlogExceptionFilter } from 'src/exceptions/blog-exceptions.filter';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BadRequestException } from './exceptions/badrequest.exception';
 import { CreateDtoValidationPipe } from './pipes/createDTO-validation.pipe';
+import { IdValidationPipe } from './pipes/id-validation.pipe';
 import { UpdateDtoValidationPipe } from './pipes/updateDTO-validation.pipe';
 import { PostService } from './post.service';
 
@@ -53,7 +54,7 @@ export class PostController
   }
 
   @Get(`${POST_PATH}/:id`)
-  async findOne(@Param('id') id: string)
+  async findOne(@Param('id', IdValidationPipe ) id: string)
   {
     // Query the database for the specific blog post
     const dbRes = await this.postService.findOne(id);
@@ -95,16 +96,9 @@ export class PostController
    * @returns Boolean indicating whether the deletetiong succeeded or failed
    */
   @Delete(`${POST_PATH}/:id`)
-  async remove( @Param('id') id: string )
+  async remove( @Param('id', IdValidationPipe ) id: string )
   {
     // Preform the record deletion capture the result 
-      const dbRes = await this.postService.remove(id);
-
-    /* If the result's delete count is not one then throw a bad request 
-     * exception */ 
-    if (dbRes.deletedCount !== 1) 
-    {
-      throw new BadRequestException();
-    }
+     await this.postService.remove( id );
   }
 }
