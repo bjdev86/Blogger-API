@@ -1,10 +1,10 @@
 GET http://localhost:3000/blog/posts HTTP/1.1
 
 ###
-GET http://localhost:3000/blog/posts/6289ce40c4715f5dc6a57b9e  HTTP/1.1
+GET http://localhost:3000/blog/posts/62bcf8e4c37f61fd739b8ad4  HTTP/1.1
 
 ###
-DELETE http://localhost:3000/blog/posts/628db76f29113eda27843a39 HTTP/1.1
+DELETE http://localhost:3000/blog/posts/62bcf8e4c37f61fd739b8ad4 HTTP/1.1
 
 ###
 POST http://localhost:3000/blog/posts HTTP/1.1
@@ -12,20 +12,20 @@ content-type: application/json
 Date: {{$datetime iso8601}}
 
 {
-    "author": 123,
+    "author": "Darlene Alderson",
     "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss'}}",
-    
+    "body": "I'm sorry Elliot.",
     "replies": []
 }
 
 ###
-PATCH http://localhost:3000/blog/posts/62abd769381af23264515cfa HTTP/1.1
+PATCH http://localhost:3000/blog/posts/62b9443ffb0a4e1798c7476f HTTP/1.1
 content-type: application/json
 
 {
-    "author": "Jimmy Dean", 
-    "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss'}}",
-    "body": "Meta-calf care"
+    "author": "Leon", 
+    "date": "{{$datetime 'YYYY-MM-DDThh:mm:ss'}}"
+    
 }
 
 ### Replies ###
