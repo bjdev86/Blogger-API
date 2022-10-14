@@ -1,7 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import mongoose, { Model } from "mongoose";
-import { PostModelType, PostSchema } from 'src/post/schemas/post.schema';
+import { Model } from "mongoose";
+import { PostModelType } from 'src/post/schemas/post.schema';
 import { NAME, PostModel } from "../entities/post.entity";
 import { BadRequestException } from "../exceptions/badrequest.exception";
 
@@ -14,10 +14,11 @@ export class UpdateDtoValidationPipe implements
                                     PipeTransform<PostModel>
 {
     /* Injection constructor to recieve and use the mongoose model singleton token. */
-    constructor( @InjectModel( NAME ) private postModel: Model<PostModel, PostModelType>) {}
+    constructor( @InjectModel( NAME ) private postModel: Model<PostModel, 
+                                                            PostModelType> ) {}
     
-     async transform( bodyDTO: PostModel, metadata: ArgumentMetadata ): 
-                                                   Promise<PostModel> 
+    async transform( bodyDTO: PostModel, metadata: ArgumentMetadata ): 
+                                                            Promise<PostModel> 
     {
         try
         { 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Document, Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { NAME as PostName, PostModel } from './entities/post.entity';
@@ -15,7 +15,9 @@ import { PostModelType } from './schemas/post.schema';
  * @todo Is findOneAnd*[Update | Delete | Replace] faster and more efficient 
  *       than finding the document and the preforming a delete operation on 
  *       it? Is it one single operation or is it two operations against the 
- *       database?   
+ *       database? It appears to be faster, and more efficient, but to maintain 
+ *       consistency it wont be used. Consider making the consistency be that 
+ *       each service handler uses findOneAnd* or at least the delete handler.
  */
 @Injectable()
 export class PostService
@@ -73,22 +75,22 @@ export class PostService
    * @param updatePostDto 
    * @returns 
    */
-  async update(id: string, updatePostDto: UpdatePostDto): Promise<Document>
+  async update(id: string, updatePostDto: UpdatePostDto): Promise<void>
   {
     // Local Variable Declaration 
     let post: any = undefined;
 
     // Find the document to be edited 
     post = await this.findOne(id);   
-
+    
     // Update the post with the incoming data from the dto
     for ( const [key, val] of Object.entries( updatePostDto ))
     {
       post[key] = val;
     }
 
-    // Save the updated doucment, and return the updated version 
-    return post.save();
+    // Save the updated doucment. 
+    post.save();
   }
 
   /**
