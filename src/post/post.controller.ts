@@ -36,7 +36,7 @@ export class PostController
   async create( @Body( CreateDtoValidationPipe ) createPostDto: CreatePostDto )
   {
     // Create a new blog post and add it to the 
-    await this.postService.create( createPostDto );
+    this.postService.create( createPostDto );
   }
 
   /**
@@ -57,9 +57,7 @@ export class PostController
   async findOne(@Param('id', IdValidationPipe ) id: string)
   {
     // Query the database for the specific blog post
-    const dbRes = await this.postService.findOne(id);
-
-    return dbRes;
+    return await this.postService.findOne(id);
   }
 
   /**
@@ -77,13 +75,7 @@ export class PostController
                 @Body( UpdateDtoValidationPipe ) updatePostDto: UpdatePostDto )
   {
     // Make the update capture the database result
-    const dbRes = await this.postService.update(id, updatePostDto);
-
-    // If the dbResult is null throw a BadRequest Exception 
-    if (dbRes === null)
-     {
-        throw new BadRequestException();
-     }
+    this.postService.update(id, updatePostDto);
   }
 
   /**
@@ -99,6 +91,6 @@ export class PostController
   async remove( @Param('id', IdValidationPipe ) id: string )
   {
     // Preform the record deletion capture the result 
-     await this.postService.remove( id );
+     this.postService.remove( id );
   }
 }
