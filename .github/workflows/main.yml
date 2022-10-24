@@ -6,24 +6,24 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-        logLevel:
-          description: 'Log level'
-          required: true
-          default: 'info'
-          type: choice
-          options:
-          - info
-          - warning
-          - debug
-        tags:
-          description: 'Test scenario tags'
-          required: false
-          type: boolean
-        environment:
-          description: 'Environment to run tests against'
-          type: environment
-          required: false
+    # inputs:
+    #     logLevel:
+    #       description: 'Log level'
+    #       required: true
+    #       default: 'info'
+    #       type: choice
+    #       options:
+    #       - info
+    #       - warning
+    #       - debug
+    #     tags:
+    #       description: 'Test scenario tags'
+    #       required: false
+    #       type: boolean
+    #     environment:
+    #       description: 'Environment to run tests against'
+    #       type: environment
+    #       required: false
   
 # The jobs of this work flow will be the to test, build and deploy this API to 
 # it's designated server. 
