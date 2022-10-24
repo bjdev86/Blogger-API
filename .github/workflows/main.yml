@@ -29,13 +29,14 @@ on:
 # it's designated server. 
 jobs:
   
-  # Preform the Jest tests setup for this API to make sure they are all still passing 
-  test: 
-    runs-on: ubuntu-latest
+  # Preform the Jest tests setup for this API to make sure they are all still 
+  # passing 
+  #test: 
+    #runs-on: ubuntu-latest
     
-    steps: 
-      - name: Run tests
-        run: echo "To be tested."
+    #steps: 
+      #- name: Run tests
+        #run: echo "To be tested."
     
   # Deploying and building will happen in one step since the build process produces needs to happen on the web server.
   deployment: 
