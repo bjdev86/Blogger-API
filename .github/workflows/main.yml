@@ -57,6 +57,7 @@ jobs:
       - name: Deploy to Digital Ocean webserver
         run: |
           echo "Directories"
+          pwd
           ls
           rsync -rav api bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
 
