@@ -35,6 +35,7 @@ jobs:
     
     steps: 
       - name: Run tests
+        run: echo "To be tested."
     
   # Deploying and building will happen in one step since the build process produces needs to happen on the web server.
   deploy-build: 
