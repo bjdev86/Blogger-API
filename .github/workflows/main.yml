@@ -59,7 +59,7 @@ jobs:
           echo "Directories"
           pwd
           ls
-          rsync -rav api bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
+          rsync -rav ../ bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
 
       # Tell the server to build the project 
       - name: Build Blogger API on Server
