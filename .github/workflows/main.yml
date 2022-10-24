@@ -31,7 +31,7 @@ jobs:
         run: echo "To be tested."
     
   # Deploying and building will happen in one step since the build process produces needs to happen on the web server.
-  deployment: 
+  deploybuild: 
 
     # Tests mus be preformed and passed before deployment.
     #needs: test
@@ -56,7 +56,7 @@ jobs:
       # Run the command set to deploy this webserver
       - name: Deploy to Digital Ocean webserver
         run: |
-          rsync -rav ../ bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
+          rsync -ravih --progress . bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
 
       # Tell the server to build the project 
       - name: Build Blogger API on Server
