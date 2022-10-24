@@ -6,24 +6,16 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    # inputs:
-    #     logLevel:
-    #       description: 'Log level'
-    #       required: true
-    #       default: 'info'
-    #       type: choice
-    #       options:
-    #       - info
-    #       - warning
-    #       - debug
-    #     tags:
-    #       description: 'Test scenario tags'
-    #       required: false
-    #       type: boolean
-    #     environment:
-    #       description: 'Environment to run tests against'
-    #       type: environment
-    #       required: false
+    inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'info'
+          type: choice
+          options:
+          - info
+          - warning
+          - debug
   
 # The jobs of this work flow will be the to test, build and deploy this API to 
 # it's designated server. 
@@ -31,12 +23,12 @@ jobs:
   
   # Preform the Jest tests setup for this API to make sure they are all still 
   # passing 
-  #test: 
-    #runs-on: ubuntu-latest
+  test: 
+    runs-on: ubuntu-latest
     
-    #steps: 
-      #- name: Run tests
-        #run: echo "To be tested."
+    steps: 
+      - name: Run tests
+        run: echo "To be tested."
     
   # Deploying and building will happen in one step since the build process produces needs to happen on the web server.
   deployment: 
