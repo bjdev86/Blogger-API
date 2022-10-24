@@ -38,10 +38,10 @@ jobs:
         run: echo "To be tested."
     
   # Deploying and building will happen in one step since the build process produces needs to happen on the web server.
-  deploy-build: 
+  deployment: 
 
     # Tests mus be preformed and passed before deployment.
-    needs: test
+    #needs: test
 
     # Specificy what version of Ubuntu we're using 
     runs-on: ubuntu-latest
