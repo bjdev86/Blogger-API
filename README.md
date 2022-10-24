@@ -1,2 +1,2 @@
 # site-api
-API for my personal site. The API will provide functionality for posting blogs, user  sessions, other functionality
+API to provide CRUD methods for text based posts and their replies. 
