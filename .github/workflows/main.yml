@@ -65,4 +65,4 @@ jobs:
         
       # Restart the Blogger API PM2 process
       - name: Restart the Blogger API process on Server
-        run: ssh bmiller@137.184.190.165 'pm2 restart \'Blogger API\''
+        run: ssh bmiller@137.184.190.165 'pm2 restart Blog_API'
