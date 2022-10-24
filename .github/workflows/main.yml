@@ -56,16 +56,13 @@ jobs:
       # Run the command set to deploy this webserver
       - name: Deploy to Digital Ocean webserver
         run: |
-          echo "Directories"
-          pwd
-          ls
           rsync -rav ../ bmiller@137.184.190.165:/var/www/benjmiller.dev/pprojects/apis/blogger
 
       # Tell the server to build the project 
       - name: Build Blogger API on Server
         run: |
-          ssh 'cd /var/www/benjmiller.dev/pprojects/apis/blogger/ && nest build'
+          ssh bmiller@137.184.190.165 'cd /var/www/benjmiller.dev/pprojects/apis/blogger/ && nest build'
         
       # Restart the Blogger API PM2 process
       - name: Restart the Blogger API process on Server
-        run: ssh 'pm2 restart \'Blogger API\''
+        run: ssh bmiller@137.184.190.165 'pm2 restart \'Blogger API\''
