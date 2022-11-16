@@ -1,12 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseFilters } from '@nestjs/common';
-import { BlogExceptionFilter } from 'src/exceptions/blog-exceptions.filter';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseFilters } from '@nestjs/common';
+import { BlogExceptionFilter } from '../exceptions/blog-exceptions.filter';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { BadRequestException } from './exceptions/badrequest.exception';
 import { CreateDtoValidationPipe } from './pipes/createDTO-validation.pipe';
 import { IdValidationPipe } from './pipes/id-validation.pipe';
 import { UpdateDtoValidationPipe } from './pipes/updateDTO-validation.pipe';
-import { PostService } from './post.service';
+import { PostService } from './services/post.service';
 
 // Module Constants 
 const POST_PATH = 'posts';
@@ -28,15 +27,14 @@ export class PostController
    *                      this route handler. 
    * @body createPOstDto 
    * 
-   * @returns JSON object indicating a success or failure of the service 
-   * operation. 
+   * @returns The ID of the newly created post entry in the database. 
    */
   // @ApiOperation({summary: "Creates a new blog post and saves it in the database. "})
   @Post(POST_PATH)
   async create( @Body( CreateDtoValidationPipe ) createPostDto: CreatePostDto )
   {
     // Create a new blog post and add it to the 
-    this.postService.create( createPostDto );
+    return this.postService.create( createPostDto );
   }
 
   /**
@@ -47,17 +45,17 @@ export class PostController
    * todo Add limit and offset
    */
   @Get(POST_PATH)
-  async findAll()
+  findAll()
   {
     // Fetch all of the blog posts from the database 
-    return await this.postService.findAll();
+    return this.postService.findAll();
   }
 
   @Get(`${POST_PATH}/:id`)
-  async findOne(@Param('id', IdValidationPipe ) id: string)
+  findOne(@Param('id', IdValidationPipe ) id: string)
   {
     // Query the database for the specific blog post
-    return await this.postService.findOne(id);
+    return this.postService.findOne(id);
   }
 
   /**
@@ -71,11 +69,11 @@ export class PostController
    * @returns Boolean indicating success or failure of the update operation
    */
   @Patch(`${POST_PATH}/:id`)
-  async update( @Param('id') id: string, 
-                @Body( UpdateDtoValidationPipe ) updatePostDto: UpdatePostDto )
+  update( @Param('id') id: string, 
+          @Body( UpdateDtoValidationPipe ) updatePostDto: UpdatePostDto )
   {
     // Make the update capture the database result
-    this.postService.update(id, updatePostDto);
+    return this.postService.update(id, updatePostDto);
   }
 
   /**
@@ -88,9 +86,9 @@ export class PostController
    * @returns Boolean indicating whether the deletetiong succeeded or failed
    */
   @Delete(`${POST_PATH}/:id`)
-  async remove( @Param('id', IdValidationPipe ) id: string )
+  remove( @Param('id', IdValidationPipe ) id: string )
   {
     // Preform the record deletion capture the result 
-     this.postService.remove( id );
+    return this.postService.remove( id );
   }
 }
