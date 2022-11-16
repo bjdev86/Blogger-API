@@ -1,15 +1,30 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PostController } from './post/post.controller';
 import { PostModule } from './post/post.module';
-@Module({
+import { RepliesController } from './post/replies/replies.controller';
+import { RepliesService } from './post/replies/replies.service';
+import { Name as PostName, PostSchema } from './post/schemas/post.schema';
+import { PostService } from './post/services/post.service';
+
+@Module(
+{
   imports: 
   [ 
-    MongooseModule.forRoot( 'mongodb://localhost/blog' ),
+    ConfigModule.forRoot(),
+    // Configure the schema with for feature function 
+    MongooseModule.forFeature(
+    [
+      {
+        name: PostName,
+        schema: PostSchema
+      },
+    ]),
+    MongooseModule.forRoot( 
+      `${process.env.MONGODB_URL}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DBNAME}` ),
     PostModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  ]
 })
+
 export class AppModule {}
