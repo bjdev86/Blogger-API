@@ -1,7 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { Model } from "mongoose";
-import { PostModelType, PostSchema } from 'src/post/schemas/post.schema';
+import { PostModelType, PostSchema } from '../schemas/post.schema';
 import { NAME, PostModel } from "../entities/post.entity";
 import { BadRequestException } from "../exceptions/badrequest.exception";
 

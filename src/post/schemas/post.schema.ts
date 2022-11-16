@@ -10,10 +10,13 @@ type PostDocumentProps =
     replies: Types.DocumentArray<ReplyModel>; 
 };
 
-// Create Model type for PostDocument models
-export type PostModelType = Model<PostModel, {}, PostDocumentProps>; 
+// Export the name of this schema 
+export const Name = "Post";
 
-export type PostDocument = PostModel & PostModelType; 
+// Create Model type for PostDocument models
+export type PostModelType = Model<PostModel, unknown, PostDocumentProps>; 
+
+//export type PostDocument = PostModel & PostModelType; 
 
 /** 
  * The schema for the posts
@@ -35,4 +38,3 @@ export const PostSchema = new Schema<PostModel, PostModelType>(
     body: { type: String, required: true },
     replies: { type: [ReplySchema], required: false }
 });
-

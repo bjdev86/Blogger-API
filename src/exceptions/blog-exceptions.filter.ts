@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, 
          HttpException, Logger } from "@nestjs/common";
-import { BadRequestException } from "src/post/exceptions/badrequest.exception";
+import { BadRequestException } from "../post/exceptions/badrequest.exception";
 
 /**
  * Class to define an exception filter for blog posts and blog posts replies. 

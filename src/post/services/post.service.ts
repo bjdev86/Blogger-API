@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { NAME as PostName, PostModel } from './entities/post.entity';
-import { BadRequestException } from './exceptions/badrequest.exception';
-import { PostModelType } from './schemas/post.schema';
-
+import { Model } from 'mongoose';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { UpdatePostDto } from '../dto/update-post.dto';
+import { NAME as PostName, PostModel } from '../entities/post.entity';
+import { BadRequestException } from '../exceptions/badrequest.exception';
+import { PostModelType } from '../schemas/post.schema';
 
 /**
  * Class to define the behavior for the Posts API. This class simply defines 
@@ -26,18 +25,29 @@ export class PostService
   constructor( @InjectModel( PostName ) private postModel: 
                              Model<PostModel, PostModelType>){}
 
-  async create( createPostDto: CreatePostDto ): Promise<void>
+  async create( createPostDto: CreatePostDto )
   {
     // Create a new document to add in 
     const newPost = new this.postModel(createPostDto);
     
     // Save the new post to persistence
-    newPost.save({ validateBeforeSave: false });
+    try
+    {
+      await newPost.save({ validateBeforeSave: false });
+    }
+    catch(error)
+    {
+      // Throw a Server Error with the relevant server information. 
+      throw error;
+    }
+
+    // Return the id of newly created post's id
+    return newPost._id.toString();
   }
 
   async findAll(): Promise<any>
   {
-    return this.postModel.find({});
+    return this.postModel.find({}).exec();
   }
 
   /**
@@ -52,7 +62,7 @@ export class PostService
     let post: any = undefined;
     
     // Attempt to fetch the post from persistence
-    post = await this.postModel.findById(id);
+    post = await this.postModel.findById(id).exec();
     
     // Return the post if it is found  
     if( post ) 
@@ -90,7 +100,7 @@ export class PostService
     }
 
     // Save the updated doucment. 
-    post.save();
+    await post.save();
   }
 
   /**
@@ -109,13 +119,5 @@ export class PostService
     // Find and delete the post if it exists 
     const post = await this.findOne(id);
     await post.deleteOne(); 
-    //await this.postModel.deleteOne({ _id: post.id });
-    // this.postModel.findByIdAndDelete(id, (error, post) => 
-    // {
-    //   if (!post)
-    //   {
-    //     throw new BadRequestException({ id: "Post not found." })
-    //   }
-    // });
   }
 }

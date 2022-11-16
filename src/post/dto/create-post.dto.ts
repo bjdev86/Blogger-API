@@ -14,6 +14,5 @@ export class CreatePostDto implements PostModel
     body: string; 
 
     @ApiProperty({ type: () => [CreateReplyDto] })
-    replies?: Types.DocumentArray<ReplyModel>;
-    
+    replies?: Types.DocumentArray<ReplyModel>;    
 }

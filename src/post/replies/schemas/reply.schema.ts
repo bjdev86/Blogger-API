@@ -9,7 +9,7 @@ type ReplyDocumentOverrides =
 }; 
 
 // The type used to define the model for a reply document
-type ReplyModelType = Model<ReplyModel, {}, ReplyDocumentOverrides>;
+type ReplyModelType = Model<ReplyModel, unknown, ReplyDocumentOverrides>;
 
 type ReplySubDocument = ReplyModel & ReplyModelType; 
 
