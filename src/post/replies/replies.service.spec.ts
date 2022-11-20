@@ -1,27 +1,25 @@
-import { BadRequestException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { connect, Connection, Schema } from 'mongoose';
 import { CreateReplyDtoStub } from '../../../test/createReply.dto.stub';
 import { CreateReplyDto } from './dto/create-reply.dto';
-
+import { PostModel } from '../entities/post.entity';
+import { Name as PostModelName, PostModelType } from '../schemas/post.schema';
+import { PostService } from '../services/post.service';
 import { ReplyModel } from './entities/reply.entity';
-import { REPLY_NAME as ReplyName } from './entities/reply.entity';
 import { RepliesService } from './replies.service';
-import { ReplyModelType } from './schemas/reply.schema';
 
 // Test suite for post serivce unit tests. 
-describe('PostService', () =>
+describe('Reply Service', () =>
 {
   // Local Variable Declaration 
   let mongoConnection: Connection;
-  let replyModel: ReplyModelType;
-  let mockReplyID: string; 
+  let mockReplyPath: string; 
+  let mockPostID: string;
   let replyService: RepliesService;
-  //let model: PostModelType; 
+  let postService: PostService;
 
-  // Constructing mock reply to test with 
-  const mockReply:CreateReplyDto = CreateReplyDtoStub();
+  let postModel: PostModelType;let mockReply:CreateReplyDto = CreateReplyDtoStub();
 
   // Setup a connection to the database before all the tests have run 
   beforeAll(async () => 
@@ -40,8 +38,8 @@ describe('PostService', () =>
     }
     
     // Get the postModel from the connection 
-    replyModel = mongoConnection.model<ReplyModel, ReplyModelType>( 
-      ReplyName, new Schema<ReplyModel, ReplyModelType>(
+    postModel = mongoConnection.model<PostModel, PostModelType>( 
+      PostModelName, new Schema<PostModel, PostModelType>(
       {
         author: String,
         date: Date,
@@ -56,27 +54,41 @@ describe('PostService', () =>
         })],
       })
     );
-    
+
     // Create the token module to use for these tests 
     const module: TestingModule = await Test.createTestingModule(
     {
-      //controllers: [PostController],
       providers: 
       [
-        RepliesService,
         {
-          provide: getModelToken(ReplyName), useValue: replyModel
+          provide: getModelToken(PostModelName), 
+          useValue: postModel,
         },
+        PostService,
+        RepliesService,
       ],  
     }).compile();
 
-    // Get the post controller to use in the tests 
+    // Get the reply service and reply model to use in the tests 
     replyService = module.get<RepliesService>(RepliesService);
-    replyModel = module.get<ReplyModelType>(getModelToken('Post'));
+
+    // Get the post service to use these tests 
+    postService = module.get<PostService>(PostService); 
+
+    // Create a mock post to which mock replies will be added to in the database
+    mockPostID = await postService.create(
+    {
+      author: "Michael Scott",
+      body: "Dwight, assistant to the regional manager.",
+      date: new Date(),
+    });
   });
 
   afterAll(async () => 
   {
+    // Delete mock post (clean up)
+    await postService.remove(mockPostID); 
+
     // Close the Mongo connection to the database
     await mongoConnection.close();  
   });
@@ -87,53 +99,58 @@ describe('PostService', () =>
     expect(replyService).toBeDefined();
   });
 
-  test("Create a new post", async () => 
+  test("Create a new reply to mock post", async () => 
   {
-    // Add a new post using the service and save the id created  
-    mockReplyID = await replyService.create(mockReply);
+    // Set the path for the mock reply 
+    mockReply.path = `${mockPostID}`;
+
+    // Add the mock reply.  
+    mockReply = ((await replyService.create(mockReply)));
+
+    // Save the path to that new reply
+    mockReplyPath = mockReply.path;
 
     // Make sure post ID is defined. 
-    return expect(mockReplyID).toBeDefined();
+    return expect(mockReplyPath).toBeDefined();
   });
 
   test.todo("Add a group of replies to a post");
 
-  test("Read the mock post from the database", async () => 
+  test("Read the mock reply from the mock post", async () => 
   {
     /* Fetch the mockpost from the database and make sure it matches the 
      * original */
-    return expect (replyService.findOne(mockReplyID)).resolves
+    return expect (replyService.findOne(mockReplyPath)).resolves
           .toMatchObject(mockReply);
   });
 
   test.todo("Read all the group of mock replies added to the database"); 
 
-  test("Update mock post", async () => 
+  test("Update mock reply", async () => 
   {
     // Create modified post from post stub
-    const modifiedMockPost = mockReply;
+    const modifiedMockReply = mockReply;
     
     // Change the auther name 
-    modifiedMockPost.author = "Dwight Schrute";
+    modifiedMockReply.author = "Dwight Schrute";
     
     // Update the mockPost using the service 
-    await replyService.update(mockReplyID, modifiedMockPost); 
+    await replyService.update(modifiedMockReply); 
     
     // Fetch the modified mock post expecting the author names to match 
-    return expect(replyService.findOne(mockReplyID)).resolves
-          .toMatchObject(modifiedMockPost);
+    return expect(replyService.findOne(mockReplyPath)).resolves
+          .toMatchObject(modifiedMockReply);
 
   });
 
-  test("Delete new Post", async () => 
+  test("Delete mock reply", async () => 
   {
     // Delete the mock post 
-    await replyService.deleteOne(mockReplyID);
+    await replyService.deleteOne(mockReplyPath);
 
     // Expect the request for the mockPost to fail
-    return expect(replyService.findOne(mockReplyID)).rejects
-          .toBeInstanceOf(BadRequestException);
+    return expect(replyService.findOne(mockReplyPath)).resolves.toBeNull();
   });
 
-  test.todo("Delete the additional mock tests added to the database");
+  test.todo("Delete the additional (group) mock tests added to the database");
 });

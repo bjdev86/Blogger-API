@@ -28,7 +28,7 @@ export class RepliesService
   * @returns 
   * 
   */
-  async create ( createReplyDTO: CreateReplyDto )
+  async create ( createReplyDTO: CreateReplyDto ): Promise<any>
   {
     // Local Variable Declaration 
     let blogPost: any = undefined, replyPost: any = undefined; 
@@ -49,21 +49,23 @@ export class RepliesService
       replyPost = replyPost.replies.id(id);
     }
     
-    // Set new posts id and add it to the path
+    // Set new post's id and add it to the path
     createReplyDTO._id = new Types.ObjectId()
     createReplyDTO.path += RPLY_PATH_DELIM + createReplyDTO._id.toHexString();
 
     // Push the reply data passed on the previous post
-    console.log(replyPost.replies.push(createReplyDTO)); 
+    replyPost.replies.push(createReplyDTO); 
     
-    // Save the addition and return 
-    return blogPost.save();
+    // Save the additional reply 
+    await blogPost.save();
+
+    // Return the path to the reply just created and added 
+    return createReplyDTO;
   }
 
   /**
    * 
    * @param path 
-   * 
    * 
    */
   async findOne( path: string )
@@ -88,7 +90,7 @@ export class RepliesService
     return replyPost;
   }
 
-  async update( updateReplyDTO: UpdateReplyDto )
+  async update( updateReplyDTO: UpdateReplyDto ): Promise<any>
   {
     // Local Variable Declaration 
     let blogPost: any = undefined, replyPost: any = undefined; 
@@ -115,11 +117,14 @@ export class RepliesService
       replyPost[key] = val;
     }
     
-    // Save the addition and return 
-    return blogPost.save();
+    // Save the update and return 
+    await blogPost.save();
+
+    // Return the updated reply post
+    return replyPost;
   }
 
-  async deleteOne( path: string)
+  async deleteOne(path: string): Promise<any>
   {
     // Local Variable Declaration 
     let blogPost: any = undefined, replyPost: any = undefined; 
@@ -140,7 +145,10 @@ export class RepliesService
     // Delete the reply post
     replyPost.remove();
     
-    // Save the addition and return 
-    return blogPost.save();
+    // Save the removal 
+    await blogPost.save();
+
+    // Return the deleted reply post 
+    return replyPost;
   }
 }
