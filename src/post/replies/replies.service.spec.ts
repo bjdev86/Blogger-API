@@ -10,7 +10,7 @@ import { ReplyModel } from './entities/reply.entity';
 import { RepliesService } from './replies.service';
 
 // Test suite for post serivce unit tests. 
-describe('Reply Service', () =>
+describe('RepliesService', () =>
 {
   // Local Variable Declaration 
   let mongoConnection: Connection;
