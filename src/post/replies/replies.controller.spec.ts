@@ -2,14 +2,15 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Connection, connect, Schema } from 'mongoose';
 import { CreateReplyDtoStub } from 'test/createReply.dto.stub';
-import { PostModel } from '../entities/post.entity';
+import { PostModel, NAME as PostModelName } from '../entities/post.entity';
 import { PostModelType } from '../schemas/post.schema';
 import { PostService } from '../services/post.service';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { ReplyModel } from './entities/reply.entity';
 import { RepliesService } from './replies.service';
 
-describe('RepliesController', () => {
+describe('RepliesController', () => 
+{
   // Local Variable Declaration 
   let mongoConnection: Connection;
   let mockReplyPath: string; 
@@ -94,7 +95,9 @@ describe('RepliesController', () => {
  /*-------------------------- BEGIN TEST SUITE -------------------------------*/
   it('should be defined', () => 
   {
-    expect(controller).toBeDefined();
+    //expect(controller).toBeDefined();
+    expect(replyService).toBeDefined();
+    expect(postService).toBeDefined();
   });
 
   test("Create a new reply to mock post", async () => 
